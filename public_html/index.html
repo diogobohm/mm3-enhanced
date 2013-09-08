@@ -1,0 +1,36 @@
+<!DOCTYPE html> 
+<html>
+	<head>
+		<link type="text/css" rel="stylesheet" href="style.css" />
+		<title>MM3 - Enhanced</title>
+	</head>
+	<body>
+		<div><a href="stop.html">Stop</a></div>
+		
+		<canvas width=800 height=600></canvas>
+		Move with arrow keys.
+		<div id="live_info"></div>
+		
+		<div id="info">
+			<h1>ViewPort and TileMap</h1>
+			Viewport() demo. 
+		</div>
+		
+		<h3>jaws log</h3>
+		<div id="jaws-log"></div>
+		
+		<script src="lib/jaws.js"></script>
+		<script src="mm3_enhanced.js"></script>
+		
+		<script>
+			jaws.onload = function() {
+				jaws.unpack()
+				jaws.assets.add(["mm_64.png", "mm_64_flipped.png", "objects_32.png", "block.png"])
+				// jaws.start() will load assets, call setup and loop update/draw in 60 FPS
+				jaws.start(MM3)
+			}
+		</script>
+	</body>
+</html>
+
+
