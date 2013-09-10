@@ -20,12 +20,14 @@
 		<div id="jaws-log"></div>
 		
 		<script src="lib/jaws.js"></script>
-		<script src="mm3_enhanced.js"></script>
+		<script src="src/asset.js"></script>
+		<script src="src/megaman.js"></script>
+		<script src="src/mm3_enhanced.js"></script>
 		
 		<script>
 			jaws.onload = function() {
 				jaws.unpack()
-				jaws.assets.add(["mm_64.png", "mm_64_flipped.png", "objects_32.png", "block.png"])
+				jaws.assets.add(getAssets())
 				// jaws.start() will load assets, call setup and loop update/draw in 60 FPS
 				jaws.start(MM3)
 			}
