@@ -5,9 +5,9 @@
 function getAssets() {
 	return [
 		getMMSpritesAsset(),
-		getMMFlippedSpritesAsset(),
 		getObjectSpritesAsset(),
 		getBlockSpritesAsset(),
+		getMetSpritesAsset(),
 	];
 }
 
@@ -19,15 +19,15 @@ function getMMSpritesAsset() {
 	return getImageDir()+"/mm_64.png";
 }
 
-function getMMFlippedSpritesAsset() {
-	return getImageDir()+"/mm_64_flipped.png";
-}
-
 function getObjectSpritesAsset() {
 	return getImageDir()+"/objects_32.png";
 }
 
 function getBlockSpritesAsset() {
 	return getImageDir()+"/block.png";
+}
+
+function getMetSpritesAsset() {
+	return getImageDir()+"/met_64.png";
 }
 

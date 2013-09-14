@@ -4,11 +4,18 @@ function MM3() {
 	var lemons;
 	var blocks;
 	var viewport;
+	var map_enemies;
+
 	var tile_map;
+
+	this.gravity = 1;
+	this.collide = function(rect) {
+		return tile_map.atRect(rect);
+	}
 
 	/* Called once when a game state is activated. Use it for one-time setup code. */
 	this.setup = function() {
-		live_info = document.getElementById("live_info");
+		var live_info = document.getElementById("live_info");
 
 		blocks = new jaws.SpriteList();
 		var world = new jaws.Rect(0,0,320*10,320*2);
@@ -36,9 +43,12 @@ function MM3() {
 
 		viewport = new jaws.Viewport({max_x: world.width, max_y: world.height});
 
-		player = new Player(tile_map);
-
 		var object_sprites = new jaws.Animation({sprite_sheet: getObjectSpritesAsset(), frame_size: [32,32], frame_duration: 200});
+
+		player = new Megaman(tile_map, 110, 0);
+		map_enemies = new SpriteList();
+		map_enemies.push(new Met(tile_map, 300, 0))
+
 		lemons = new SpriteList();
 		lemons.sprite = object_sprites.slice(0,1).next();
 		lemons.addLemon = function () {
@@ -55,7 +65,6 @@ function MM3() {
 			};
 			lemons.push(lemon);
 		};
-
 
 		jaws.preventDefaultKeys(["down", "a", "left", "right", "s"]);
 	};
@@ -90,6 +99,7 @@ function MM3() {
 		// apply vx / vy (x velocity / y velocity), check for collision detection in the process.
 		player.update();
 		lemons.update();
+		map_enemies.update();
 
 		// Tries to center viewport around player.x / player.y.
 		// It won't go outside of 0 or outside of our previously specified max_x, max_y values.
@@ -108,7 +118,8 @@ function MM3() {
 		viewport.apply( function() {
 			blocks.draw();
 			player.getSprite().draw();
+			map_enemies.draw();
 			lemons.draw();
 		});
 	};
-}
+};

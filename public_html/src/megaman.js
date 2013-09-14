@@ -2,35 +2,32 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-function Player(map) {
+function Megaman(map, x, y) {
 	var tile_map = map; //Remove from the object later
 
-	var sprite = new jaws.Sprite({x:110, y:320, scale: 1, anchor: "center_bottom"});
+	var character = new Character(map, 100, 64, x, y, getMMSpritesAsset());
+	var sprite = character.sprite;
+	var animation = character.animation;
 	
-	var right_anim = new jaws.Animation({sprite_sheet: getMMSpritesAsset(), frame_size: [64,64], frame_duration: 200});
-	var right_walk_anim = new jaws.Animation({bounce: true, sprite_sheet: getMMSpritesAsset(), frame_size: [64,64], frame_duration: 200});
-	var left_anim = new jaws.Animation({sprite_sheet: getMMFlippedSpritesAsset(), frame_size: [64,64], frame_duration: 200});
-	var left_walk_anim = new jaws.Animation({bounce: true, sprite_sheet: getMMFlippedSpritesAsset(), frame_size: [64,64], frame_duration: 200});
+	var anim_left_default = animation.left_anim.slice(3,4);
+	var anim_left_default_blink = animation.left_anim.slice(4,5);
+	var anim_left_start_walk = animation.left_anim.slice(5,6);
+	var anim_left = animation.left_bounce_anim.slice(6,9);
+	var anim_left_up = animation.left_anim.slice(9,10);
+	var anim_left_default_shoot = animation.left_anim.slice(10,11);
+	var anim_left_shoot = animation.left_bounce_anim.slice(11,14);
+	var anim_left_up_shoot = animation.left_anim.slice(14,15);
+	var anim_left_slide = animation.left_anim.slice(17,18);
 	
-	var anim_left_default = left_anim.slice(3,4);
-	var anim_left_default_blink = left_anim.slice(4,5);
-	var anim_left_start_walk = left_anim.slice(5,6);
-	var anim_left = left_walk_anim.slice(6,9);
-	var anim_left_up = left_anim.slice(9,10);
-	var anim_left_default_shoot = left_anim.slice(10,11);
-	var anim_left_shoot = left_walk_anim.slice(11,14);
-	var anim_left_up_shoot = left_anim.slice(14,15);
-	var anim_left_slide = left_anim.slice(17,18);
-	
-	var anim_right_default = right_anim.slice(3,4);
-	var anim_right_default_blink = right_anim.slice(4,5);
-	var anim_right_start_walk = right_anim.slice(5,6);
-	var anim_right = right_walk_anim.slice(6,9);
-	var anim_right_up = right_anim.slice(9,10);
-	var anim_right_default_shoot = right_anim.slice(10,11);
-	var anim_right_shoot = right_walk_anim.slice(11,14);
-	var anim_right_up_shoot = right_anim.slice(14,15);
-	var anim_right_slide = right_anim.slice(17,18);
+	var anim_right_default = animation.right_anim.slice(3,4);
+	var anim_right_default_blink = animation.right_anim.slice(4,5);
+	var anim_right_start_walk = animation.right_anim.slice(5,6);
+	var anim_right = animation.right_bounce_anim.slice(6,9);
+	var anim_right_up = animation.right_anim.slice(9,10);
+	var anim_right_default_shoot = animation.right_anim.slice(10,11);
+	var anim_right_shoot = animation.right_bounce_anim.slice(11,14);
+	var anim_right_up_shoot = animation.right_anim.slice(14,15);
+	var anim_right_slide = animation.right_anim.slice(17,18);
 	
 	var vx = 0;
 	var vy = 0;
@@ -46,7 +43,7 @@ function Player(map) {
 	
 	var is_to_right = true;
 
-	sprite.setImage( anim_right_default.next() );
+	sprite.setImage(anim_right_default.next());
 	
 	this.update = function() {
 		sprite.x += vx;
