@@ -53,25 +53,30 @@ function MM3() {
 		lemons.sprite = object_sprites.slice(0,1).next();
 		lemons.addLemon = function () {
 			var lemon = new Sprite({image: lemons.sprite, x: player.getShootStartX(), y: player.getShootStartY()});
-			lemon.incX = player.isToRight()? 10 : -10;
+			lemon.incX = player.isToRight() ? 10 : -10;
 			lemon.update = function() {
 				lemon.x += lemon.incX;
 
 				var block = tile_map.atRect(lemon.rect())[0];
-				if (block ||  viewport.isOutside(lemon)) {
+				if (block || isOutsideViewport(lemon)) {
 					player.removeShoot();
 					lemons.remove(lemon);
 				}
 			};
+			lemon.rect = function() {
+				return new Hitbox(lemon, 7, 10, 17, 12).rect();
+			};
 			lemons.push(lemon);
+
+
 		};
 
 		jaws.preventDefaultKeys(["down", "a", "left", "right", "s"]);
 	};
 
+
 	/* update() will get called each game tick with your specified FPS. Put game logic here. */
 	this.update = function() {
-		player.maintenance();
 
 		if (jaws.pressed("left"))  {
 			player.leftKeyEvent();
@@ -82,9 +87,8 @@ function MM3() {
 		if (jaws.pressed("s")) {
 			if (jaws.pressed("down")) {
 				player.slideEvent();
-				} else {
-					player.jumpEvent();
-
+			} else {
+				player.jumpEvent();
 			}
 		}
 		if (jaws.pressed("a")) {
@@ -93,19 +97,26 @@ function MM3() {
 			}
 		}
 
-		// some gravity
-		player.applyGravity(1);
-
-		// apply vx / vy (x velocity / y velocity), check for collision detection in the process.
 		player.update();
-		lemons.update();
 		map_enemies.update();
+		lemons.update();
+		
+		jaws.collide(lemons, map_enemies, function(lemon, enemy) {
+			if (!enemy.isInvincible()) {
+				enemy.removeLife(30);	
+				if (!enemy.isAlive()) {
+					map_enemies.remove(enemy);
+				}
+			}
+			lemons.remove(lemon);
+			player.removeShoot();
+		});
 
 		// Tries to center viewport around player.x / player.y.
 		// It won't go outside of 0 or outside of our previously specified max_x, max_y values.
-		viewport.centerAround(player.getSprite());
+		viewport.centerAround(player.sprite);
 
-		live_info.innerHTML = jaws.game_loop.fps + " fps. Player: " + parseInt(player.getSprite().x) + "/" + parseInt(player.getSprite().y) + ". ";
+		live_info.innerHTML = jaws.game_loop.fps + " fps. Player: " + parseInt(player.sprite.x) + "/" + parseInt(player.sprite.y) + ". ";
 		live_info.innerHTML += "Viewport: " + parseInt(viewport.x) + "/" + parseInt(viewport.y) + ".";
 
 	};
@@ -116,10 +127,17 @@ function MM3() {
 
 		// the viewport magic. wrap all draw()-calls inside viewport.apply and it will draw those relative to the viewport.
 		viewport.apply( function() {
-			blocks.draw();
-			player.getSprite().draw();
-			map_enemies.draw();
-			lemons.draw();
+			blocks.drawIf(isInsideViewport);
+			player.draw();
+			map_enemies.draw(isInsideViewport);
+			lemons.draw(isInsideViewport);
 		});
 	};
+
+	var isInsideViewport = function(element) {
+		return !isOutsideViewport(element);
+	}
+	var isOutsideViewport = function(element) {
+		return !viewport.isPartlyInside(element);
+	}
 };

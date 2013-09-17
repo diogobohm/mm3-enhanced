@@ -14,7 +14,7 @@ function Met(map, x, y) {
 
 	var anim_left = animation.left_bounce_anim.slice(0,3);
 	var anim_right = animation.right_bounce_anim.slice(0,3);
-	
+	var anim_none = animation.left_anim.slice(5,6);
 
 	var getSprite = function() {
 		return sprite;
@@ -48,24 +48,27 @@ function Met(map, x, y) {
 		}
 	}
 
+	var invincible_flag = false;
 	var setSprite = function() {
 		/* means the is on the ground and stopped, set default frames */
 		if (character.isWalking()) {
 			if (character.isToRight()) {
 				sprite.setImage(anim_right.next());
-				anim_left.next();
 			} else {
-				anim_right.next();
 				sprite.setImage(anim_left.next());
 			}
 		} else {
 			if (character.isToRight()) {
 				sprite.setImage(anim_right_default.next());
-				anim_left_default.next();
 			} else {
-				anim_right_default.next();
 				sprite.setImage(anim_left_default.next());
 			}
+		}
+		if (character.isInvincible()) {
+			if (invincible_flag) {
+				sprite.setImage(anim_none.next());
+			}
+			invincible_flag = !invincible_flag;
 		}
 	}
 
@@ -73,14 +76,27 @@ function Met(map, x, y) {
 		autoPilot();
 		setSprite();
 		character.update();
-	}
+	};
+
+	var rect = function() {
+		//return new Hitbox(character.sprite, 13, 26, 40, 36).rect();
+		return character.sprite.rect();
+	};
 
 	/* Public functions */
 	this.getShootStartX = getShootStartX;
 	this.getShootStartY = getShootStartY;
 	this.removeShoot = removeShoot;
 
-	this.draw = character.draw;
 	this.update = update;
 	this.getSprite = getSprite;
+	this.draw = character.draw;
+
+	this.removeLife = character.removeLife;
+	this.addLife = character.addLife;
+	this.getLife = character.getLife;
+	this.isAlive = character.isAlive;
+	this.isInvincible = character.isInvincible;
+
+	this.rect = rect;
 }

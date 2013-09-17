@@ -29,49 +29,35 @@ function Megaman(map, x, y) {
 	var anim_right_up_shoot = animation.right_anim.slice(14,15);
 	var anim_right_slide = animation.right_anim.slice(17,18);
 	
-	var vx = 0;
-	var vy = 0;
-	var can_jump = true;
-	var can_shoot = true;
-	var is_jumping = false;
-	var is_sliding = false;
-	var is_walking = false;
-	var is_shooting = false;
 	var shoot_counter = 0;
-	var shoot_recovery = 0;
-	var slide_recovery = 0;
-	
-	var is_to_right = true;
 
 	sprite.setImage(anim_right_default.next());
 	
-	this.update = function() {
-		sprite.x += vx;
-		if(tile_map.atRect(sprite.rect()).length > 0) {
-			sprite.x -= vx;
+	var removeShoot = function() {
+		shoot_counter--;
+	};
+
+	var shootEvent = function () {
+		if (shoot_counter < 3 && character.shootEvent()) {
+			shoot_counter++;
+			return true;
 		}
-		vx = 0;
-		
-		sprite.y += vy;
-		var block = tile_map.atRect(sprite.rect())[0];
-		if (block) {
-			// Heading downwards
-			if(vy > 0) {
-				can_jump = true;
-				is_jumping = false;
-				sprite.y = block.rect().y - 1;
-			}
-			// Heading upwards (jumping)
-			else if(vy < 0) {
-				sprite.y = block.rect().bottom + sprite.height;
-			}
-			vy = 0;
-		}
-		
+		return false;
+	}
+
+	var getShootStartX = function() {
+		return sprite.x + (character.isToRight()? sprite.width*0.25: -sprite.width * 0.75);
+	};
+
+	var getShootStartY = function() {
+		return sprite.y-(sprite.height*0.65)-(character.isJumping()? sprite.height * 0.3:0);
+	};
+
+	var setSprite = function() {
 		/* means the is on the ground and stopped, set default frames */
-		if (is_walking) {
-			if (is_to_right) {
-				if (is_shooting) {
+		if (character.isWalking()) {
+			if (character.isToRight()) {
+				if (character.isShooting()) {
 					// Keep walking frames in sync
 					sprite.setImage(anim_right_shoot.next());
 					anim_right.next();
@@ -81,7 +67,7 @@ function Megaman(map, x, y) {
 					anim_right_shoot.next();
 				}
 			} else {
-				if (is_shooting) {
+				if (character.isShooting()) {
 					// Keep walking frames in sync
 					sprite.setImage(anim_left_shoot.next());
 					anim_left.next();
@@ -91,151 +77,68 @@ function Megaman(map, x, y) {
 					anim_left_shoot.next();
 				}
 			}
-		} else if (is_jumping) {
-			if (is_to_right) {
-				if (is_shooting) {
+		} else if (character.isJumping()) {
+			if (character.isToRight()) {
+				if (character.isShooting()) {
 					sprite.setImage(anim_right_up_shoot.next());
 				} else {
 					sprite.setImage(anim_right_up.next());
 				}
 			} else {
-				if (is_shooting) {
+				if (character.isShooting()) {
 					sprite.setImage(anim_left_up_shoot.next());
 				} else {
 					sprite.setImage(anim_left_up.next());
 				}
 			}
-		} else if (is_sliding) {
-			if (is_to_right) {
+		} else if (character.isSliding()) {
+			if (character.isToRight()) {
 				sprite.setImage(anim_right_slide.next());
 			} else {
 				sprite.setImage(anim_left_slide.next());
 			}
 		} else {
-			if (is_to_right) {
-				if (is_shooting) {
+			if (character.isToRight()) {
+				if (character.isShooting()) {
 					sprite.setImage(anim_right_default_shoot.next());
 				} else {
 					sprite.setImage(anim_right_default.next());
 				}
 			} else {
-				if (is_shooting) {
+				if (character.isShooting()) {
 					sprite.setImage(anim_left_default_shoot.next());
 				} else {
 					sprite.setImage(anim_left_default.next());
 				}
 			}
 		}
-	};
-
-	this.getSprite = function() {
-		return sprite;
 	}
-	
-	this.setWalking = function() {
-		is_walking = true;
-		is_jumping = is_sliding = false;
-	};
-	
-	this.setJumping = function() {
-		is_jumping = true;
-		is_walking = is_sliding = false;
-		can_jump = false;
-	};
-	
-	this.setSliding = function() {
-		slide_recovery = 30;
-		is_sliding = true;
-		is_walking = is_jumping = false;
-	};
 
-	this.isToRight = function() {
-		return is_to_right;
-	};
+	var update = function () {
+		setSprite();
+		character.update();
+	}
 
-	this.applyGravity = function(acceleration) {
-		vy += acceleration;
-	};
+	/* Public functions */
+	this.getShootStartX = getShootStartX;
+	this.getShootStartY = getShootStartY;
+	this.removeShoot = removeShoot;
 
-	this.maintenance = function() {
-		is_walking = false;
+	this.update = update;
+	this.draw = character.draw;
+	this.sprite = character.sprite;
 
-		slide_recovery = Math.max(0, slide_recovery-1);
-		if (slide_recovery === 0) {
-			is_sliding = false;
-		}
-		vx = is_sliding? (is_to_right? 5 : -5) : 0;
+	this.isToRight = character.isToRight;
 
-		shoot_recovery = Math.max(0, shoot_recovery-1);
-		if (shoot_recovery === 0 && shoot_counter < 3) {
-			can_shoot = true;
-			is_shooting = false;
-		}
+	this.shootEvent = shootEvent;
+	this.leftKeyEvent = character.leftKeyEvent;
+	this.rightKeyEvent = character.rightKeyEvent;
+	this.jumpEvent = character.jumpEvent;
+	this.slideEvent = character.slideEvent;
 
-		if (vy !== 0) {
-			this.setJumping();
-		}
-	};
-
-	this.leftKeyEvent = function() {
-		is_to_right = false;
-		if (!is_sliding) {
-			if (can_jump) {
-				vx = -4;
-				this.setWalking();
-			} else {
-				vx = -2;
-			}
-		}
-	};
-
-	this.rightKeyEvent = function() {
-		is_to_right = true;
-		if (!is_sliding) {
-			if (can_jump) {
-				vx = 4;
-				this.setWalking();
-			} else {
-				vx = 2;
-			}
-		}
-	};
-
-	this.jumpEvent = function() {
-		if (can_jump) {
-			this.setJumping();
-			vy = -20;
-		}
-	};
-
-	this.slideEvent = function() {
-		if (can_jump && !is_sliding) {
-			this.setSliding();
-		}
-	};
-
-	this.shootEvent = function() {
-		if (can_shoot && !is_sliding) {
-			is_shooting = true;
-			can_shoot = false;
-			shoot_recovery = 5;
-			shoot_counter++;
-
-			return true;			
-		}
-		return false;
-	};
-
-	this.removeShoot = function() {
-		shoot_counter--;
-	};
-
-	this.getShootStartX = function() {
-		return sprite.x + (is_to_right? sprite.width*0.25: -sprite.width*0.75);
-	};
-
-	this.getShootStartY = function() {
-		return sprite.y-(sprite.height*0.65)-(is_jumping?sprite.height*0.3:0);
-	};
+	this.removeLife = character.removeLife;
+	this.addLife = character.addLife;
+	this.getLife = character.getLife;
+	this.isAlive = character.isAlive;
 }
 

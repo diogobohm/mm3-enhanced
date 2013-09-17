@@ -14,12 +14,19 @@ function Character(tile_map, life, size, x, y, image) {
 	var can_jump = true;
 	var can_shoot = true;
 	var is_jumping = false;
-	var is_sliding = false;
 	var is_walking = false;
+
+	var shoot_recovery_time = 5;
 	var is_shooting = false;
-	var shoot_counter = 0;
 	var shoot_recovery = 0;
+
+	var slide_recovery_time = 30;
+	var is_sliding = false;
 	var slide_recovery = 0;
+
+	var invincibility_recovery_time = 300;
+	var is_invincible = false;
+	var invincibility_recovery = 0;
 	
 	var is_to_right = true;
 
@@ -66,10 +73,8 @@ function Character(tile_map, life, size, x, y, image) {
 		if (can_shoot && !is_sliding) {
 			is_shooting = true;
 			can_shoot = false;
-			shoot_recovery = 5;
-			shoot_counter++;
-
-			return true;			
+			shoot_recovery = shoot_recovery_time;
+			return true;
 		}
 		return false;
 	};
@@ -84,6 +89,7 @@ function Character(tile_map, life, size, x, y, image) {
 	};
 
 	var removeLife = function(amount) {
+		setInvincible();
 		return addLife(-amount);
 	};
 
@@ -103,9 +109,14 @@ function Character(tile_map, life, size, x, y, image) {
 	};
 	
 	var setSliding = function() {
-		slide_recovery = 30;
+		slide_recovery = slide_recovery_time;
 		is_sliding = true;
 		is_walking = is_jumping = false;
+	};
+
+	var setInvincible = function() {
+		invincibility_recovery = invincibility_recovery_time;
+		is_invincible = true;
 	};
 
 	var isWalking = function() {
@@ -120,6 +131,14 @@ function Character(tile_map, life, size, x, y, image) {
 		return is_sliding;
 	};
 
+	var isShooting = function() {
+		return is_shooting;
+	};
+
+	var isInvincible = function() {
+		return is_invincible;
+	};
+
 	var isToRight = function() {
 		return is_to_right;
 	};
@@ -128,7 +147,16 @@ function Character(tile_map, life, size, x, y, image) {
 		/* TODO - dynamic gravity */
 		vy += 1;
 
-		is_walking = false;
+		shoot_recovery = Math.max(0, shoot_recovery-1);
+		if (shoot_recovery === 0) {
+			can_shoot = true;
+			is_shooting = false;
+		}
+
+		invincibility_recovery = Math.max(0, invincibility_recovery-1);
+		if (invincibility_recovery === 0) {
+			is_invincible = false;
+		}
 
 		slide_recovery = Math.max(0, slide_recovery-1);
 		if (slide_recovery === 0) {
@@ -136,16 +164,9 @@ function Character(tile_map, life, size, x, y, image) {
 		}
 		vx = is_sliding? (is_to_right? 5 : -5) : vx;
 
-		shoot_recovery = Math.max(0, shoot_recovery-1);
-		if (shoot_recovery === 0 && shoot_counter < 3) {
-			can_shoot = true;
-			is_shooting = false;
+		if (vx == 0) {
+			is_walking = false;
 		}
-
-		if (vy !== 0) {
-			setJumping();
-		}
-
 		sprite.x += vx;
 		if(tile_map.atRect(sprite.rect()).length > 0) {
 			sprite.x -= vx;
@@ -167,6 +188,9 @@ function Character(tile_map, life, size, x, y, image) {
 			}
 			vy = 0;
 		}
+		if (vy !== 0) {
+			setJumping();
+		}
 	};
 
 	var draw = function() {
@@ -186,6 +210,8 @@ function Character(tile_map, life, size, x, y, image) {
 	this.isWalking = isWalking;
 	this.isJumping = isJumping;
 	this.isSliding = isSliding;
+	this.isShooting = isShooting;
+	this.isInvincible = isInvincible;
 	this.isToRight = isToRight;
 
 	this.leftKeyEvent = leftKeyEvent;
