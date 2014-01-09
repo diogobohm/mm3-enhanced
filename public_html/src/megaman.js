@@ -4,7 +4,7 @@
  */
 function Megaman(map, x, y) {
 	var tile_map = map; //Remove from the object later
-
+	
 	var character = new Character(map, 100, 64, x, y, getMMSpritesAsset());
 	var sprite = character.sprite;
 	var animation = character.animation;
@@ -127,6 +127,7 @@ function Megaman(map, x, y) {
 	this.update = update;
 	this.draw = character.draw;
 	this.sprite = character.sprite;
+	this.hitbox = character.hitbox;
 
 	this.isToRight = character.isToRight;
 

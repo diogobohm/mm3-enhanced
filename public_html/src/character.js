@@ -7,8 +7,9 @@ function Character(tile_map, life, size, x, y, image) {
 	var max_life = life;
 
 	var sprite = new jaws.Sprite({x: x, y: y, scale: 1, anchor: "center_bottom"});
+	var hitboxrect = new Hitbox(sprite, 0, 0, sprite.width, sprite.height);
 	var animation = new AnimationManager(size, image);
-
+	
 	var vx = 0;
 	var vy = 0;
 	var can_jump = true;
@@ -142,7 +143,7 @@ function Character(tile_map, life, size, x, y, image) {
 	var isToRight = function() {
 		return is_to_right;
 	};
-
+	
 	var update = function() {
 		/* TODO - dynamic gravity */
 		vy += 1;
@@ -174,7 +175,9 @@ function Character(tile_map, life, size, x, y, image) {
 		vx = 0;
 		
 		sprite.y += vy;
-		var block = tile_map.atRect(sprite.rect())[0];
+		hitboxrect.update();
+		
+		var block = tile_map.atRect(hitboxrect.rect())[0];
 		if (block) {
 			// Heading downwards
 			if(vy > 0) {
@@ -195,6 +198,7 @@ function Character(tile_map, life, size, x, y, image) {
 
 	var draw = function() {
 		sprite.draw();
+		hitboxrect.draw();
 	}
 
 	/* Public members */
