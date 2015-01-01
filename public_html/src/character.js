@@ -21,7 +21,7 @@ function Character(tile_map, life, size, x, y, image) {
 	var is_shooting = false;
 	var shoot_recovery = 0;
 
-	var slide_recovery_time = 30;
+	var slide_recovery_time = 20;
 	var is_sliding = false;
 	var slide_recovery = 0;
 
@@ -163,9 +163,9 @@ function Character(tile_map, life, size, x, y, image) {
 		if (slide_recovery === 0) {
 			is_sliding = false;
 		}
-		vx = is_sliding? (is_to_right? 5 : -5) : vx;
+		vx = is_sliding? (is_to_right? 8 : -8) : vx;
 
-		if (vx == 0) {
+		if (vx === 0) {
 			is_walking = false;
 		}
 		sprite.x += vx;
@@ -175,8 +175,9 @@ function Character(tile_map, life, size, x, y, image) {
 		vx = 0;
 		
 		sprite.y += vy;
-		hitboxrect.update();
 		
+		//MUST recreate hitbox... I guess you just can't update rect, not even internally
+		hitboxrect = new Hitbox(sprite, 0, 0, sprite.width, sprite.height);
 		var block = tile_map.atRect(hitboxrect.rect())[0];
 		if (block) {
 			// Heading downwards
@@ -199,7 +200,7 @@ function Character(tile_map, life, size, x, y, image) {
 	var draw = function() {
 		sprite.draw();
 		hitboxrect.draw();
-	}
+	};
 
 	/* Public members */
 	this.sprite = sprite;
