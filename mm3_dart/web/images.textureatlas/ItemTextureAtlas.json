@@ -1,0 +1,44 @@
+{"frames": [
+
+{
+	"filename": "item_life_1.png",
+	"frame": {"x":36,"y":22,"w":18,"h":18},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":14,"w":18,"h":18},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "item_life_2.png",
+	"frame": {"x":36,"y":2,"w":18,"h":18},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":14,"w":18,"h":18},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "item_life_big_1.png",
+	"frame": {"x":2,"y":36,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "item_life_big_2.png",
+	"frame": {"x":2,"y":2,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker ",
+	"version": "1.0",
+	"image": "ItemTextureAtlas.png",
+	"format": "RGBA8888",
+	"size": {"w":64,"h":128},
+	"scale": "2",
+	"smartupdate": "$TexturePacker:SmartUpdate:2e6c2b00fcd1a3dcfbf0a3c23895cd22$"
+}
+}

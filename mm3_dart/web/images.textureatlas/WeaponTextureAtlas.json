@@ -1,0 +1,92 @@
+{"frames": [
+
+{
+	"filename": "icon_elec.png",
+	"frame": {"x":36,"y":70,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "icon_lemon.png",
+	"frame": {"x":36,"y":36,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "icon_star.png",
+	"frame": {"x":76,"y":2,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "lemon.png",
+	"frame": {"x":42,"y":104,"w":18,"h":14},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":9,"w":18,"h":14},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "lemon_left.png",
+	"frame": {"x":22,"y":104,"w":18,"h":14},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":9,"w":18,"h":14},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "shot.png",
+	"frame": {"x":2,"y":104,"w":18,"h":18},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":7,"w":18,"h":18},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "star_1.png",
+	"frame": {"x":42,"y":2,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "star_2.png",
+	"frame": {"x":2,"y":70,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "star_left_1.png",
+	"frame": {"x":2,"y":36,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "star_left_2.png",
+	"frame": {"x":2,"y":2,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker ",
+	"version": "1.0",
+	"image": "WeaponTextureAtlas.png",
+	"format": "RGBA8888",
+	"size": {"w":128,"h":128},
+	"scale": "2",
+	"smartupdate": "$TexturePacker:SmartUpdate:e7fb6d28c610b475453fc722ff8e4df4$"
+}
+}
